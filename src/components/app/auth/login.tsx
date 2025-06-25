@@ -40,7 +40,7 @@ const LoginFrom: FC = () => (
         <div className="flex items-center">
           <Label>Password</Label>
           <Link
-            to="/panel/recover"
+            to="/recover"
             className="ml-auto text-sm underline-offset-2 hover:underline"
           >
             Forgot your password?
