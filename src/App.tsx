@@ -1,12 +1,9 @@
-import LoginUi, { LoginFrom, LoginInfo } from "./components/app/login";
+import MainRouter from "./routes/main";
 
 function App() {
   return (
     <div className="min-h-screen">
-      <LoginUi>
-        <LoginInfo />
-        <LoginFrom />
-      </LoginUi>
+      <MainRouter />
     </div>
   );
 }
