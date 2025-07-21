@@ -4,6 +4,14 @@ import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
 import tseslint from "typescript-eslint";
 
+const noVars = [
+  "error",
+  {
+    varsIgnorePattern: "^_",
+    argsIgnorePattern: "^_",
+  },
+];
+
 export default tseslint.config(
   { ignores: ["dist", "src/components/ui"] },
   {
