@@ -16,6 +16,7 @@ import {
 import { EllipsisVertical } from "lucide-react";
 import { ContentWraper } from "../main";
 import type { FC } from "react";
+import { format } from "timeago.js";
 
 type ProjectAppTypePropsType = {
   type: AppType["type"];
@@ -67,7 +68,7 @@ const ProjectAppsUi: FC<ProjectAppsUiPropsType> = ({ apps }) => (
                 <ProjectAppType type={type} />
               </Button>
             </TableCell>
-            <TableCell>{updateAt}</TableCell>
+            <TableCell>{format(updateAt)}</TableCell>
             <TableCell>
               <Button variant="ghost" size="icon">
                 <EllipsisVertical />
