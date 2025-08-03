@@ -39,3 +39,5 @@ yarn*
 
 # ref files
 ref/
+
+.env

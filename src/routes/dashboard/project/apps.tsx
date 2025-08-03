@@ -1,41 +1,56 @@
 import type { AppType } from "@/@types/app.type";
+import type { AppsByProjectIdResponseType } from "@/@types/responce.type";
+import { get } from "@/api/main";
 import ProjectAppsUi from "@/components/app/dashboard/project/apps";
-import type { FC } from "react";
-
-const apps: AppType[] = [
-  {
-    _id: "c6758931-69b9-43d7-ba99-470ddcae05bc",
-    name: "nwiskar0",
-    type: "web",
-    updateAt: "2025-03-02 11:02:06",
-  },
-  {
-    _id: "bc7badcc-08f8-44d9-abb1-2d1c3d957c34",
-    name: "gedwinson1",
-    type: "android",
-    updateAt: "2024-11-16 02:39:44",
-  },
-  {
-    _id: "a0596390-3943-4e60-a2e8-7279799c89c5",
-    name: "bblackaller2",
-    type: "cross",
-    updateAt: "2024-10-02 05:09:08",
-  },
-  {
-    _id: "183f266f-8813-440e-aff3-caf6c103ec57",
-    name: "owiper3",
-    type: "ios",
-    updateAt: "2025-02-23 19:54:52",
-  },
-  {
-    _id: "43b616cb-3694-4bb2-9456-802853f9f0e3",
-    name: "ebrinicombe4",
-    type: "native",
-    updateAt: "2025-03-12 16:37:52",
-  },
-];
+import MainLoader from "@/components/app/ui/loader";
+import useAuth from "@/providers/auth.provider";
+import useProject from "@/providers/project.provider";
+import { useEffect, useState, type FC } from "react";
 
 const ProjectAppsPage: FC = () => {
+  const [apps, setApps] = useState<AppType[] | undefined | null>(null);
+  const [error, setError] = useState<string | undefined>();
+ const {id}= useProject()
+  const { token } = useAuth();
+
+  useEffect(() => {
+    const fetchApps = async () => {
+      try {
+        const res = await get(`/project/${id}/apps`, {
+          Authorization: `Bearer ${token}`,
+        });
+
+        const data = (await res.json()) as AppsByProjectIdResponseType;
+
+        if (!data.success) {
+          throw new Error(data.message);
+        }
+        setApps(data.data.apps);
+        setError(undefined);
+      } catch (e) {
+        if (!(e instanceof Error)) {
+          throw e;
+        }
+        setError(e.message);
+        setApps(undefined);
+      }
+    };
+    fetchApps();
+  }, [id, token]);
+
+  if (apps === null) {
+    return <MainLoader />;
+  }
+
+  if (apps === undefined || error) {
+    return (
+      <div>
+        some error,
+        {error}
+      </div>
+    );
+  }
+
   return <ProjectAppsUi apps={apps} />;
 };
 

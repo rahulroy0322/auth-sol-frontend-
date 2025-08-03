@@ -3,10 +3,7 @@ type UserType = {
   uname: string;
   role: "user" | "owner" | "geast" | "editor" | "admin";
   email: string;
-  password?: string;
-  "2fa": {
-    enabled: boolean;
-  };
+  projectId: string;
 };
 
 export type { UserType };

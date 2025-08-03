@@ -18,6 +18,7 @@ import {
 
 type AuthContextType = {
   user: UserType | undefined | null;
+  token: string | undefined | null;
   error: string | null | undefined;
   fetchMe: () => Promise<void>;
 };
@@ -31,6 +32,9 @@ type AuthProviderPropsType = {
 const AuthProvider: FC<AuthProviderPropsType> = ({ children }) => {
   const [user, setUser] = useState<AuthContextType["user"]>(null);
   const [error, setError] = useState<AuthContextType["error"]>();
+  const [token, setToken] = useState<AuthContextType["token"]>(() =>
+    localStorage.getItem(ACCESS_KEY)
+  );
 
   const fetchMe = useCallback(async () => {
     const token = localStorage.getItem(ACCESS_KEY);
@@ -40,7 +44,7 @@ const AuthProvider: FC<AuthProviderPropsType> = ({ children }) => {
       return;
     }
     try {
-      const res = await get("/user/me", {
+      const res = await get("/profile/me", {
         Authorization: `Bearer ${token}`,
       });
 
@@ -48,7 +52,7 @@ const AuthProvider: FC<AuthProviderPropsType> = ({ children }) => {
 
       if (!data.success) {
         const token = localStorage.getItem(REFRESH_KEY);
-        const res= (await (
+        const res = (await (
           await get("/auth/refresh", {
             Authorization: `Bearer ${token}`,
           })
@@ -57,7 +61,7 @@ const AuthProvider: FC<AuthProviderPropsType> = ({ children }) => {
         if (!res.success) {
           throw new Error(res.message);
         }
-
+        setToken(res.data.token.accessToken);
         setUser(res.data.user);
         saveToLocal(res.data);
         return;
@@ -84,6 +88,7 @@ const AuthProvider: FC<AuthProviderPropsType> = ({ children }) => {
         user,
         fetchMe,
         error,
+        token,
       }}
     >
       {children}

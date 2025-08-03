@@ -53,12 +53,12 @@ const ProjectAppsUi: FC<ProjectAppsUiPropsType> = ({ apps }) => (
           <TableHead>#</TableHead>
           <TableHead>Name</TableHead>
           <TableHead>Type</TableHead>
-          <TableHead>Last Modified</TableHead>
+          <TableHead>Created</TableHead>
           <TableHead>Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {apps.map(({ _id, name, type, updateAt }) => (
+        {apps.map(({ _id, name, type, createdAt }) => (
           <TableRow key={_id}>
             {/* eslint-disable-next-line no-magic-numbers */}
             <TableCell>{_id.substring(0, 8)}</TableCell>
@@ -68,7 +68,7 @@ const ProjectAppsUi: FC<ProjectAppsUiPropsType> = ({ apps }) => (
                 <ProjectAppType type={type} />
               </Button>
             </TableCell>
-            <TableCell>{format(updateAt)}</TableCell>
+            <TableCell>{format(createdAt)}</TableCell>
             <TableCell>
               <Button variant="ghost" size="icon">
                 <EllipsisVertical />

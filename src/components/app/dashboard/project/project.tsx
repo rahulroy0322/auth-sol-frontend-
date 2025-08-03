@@ -11,17 +11,22 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 type ProjectUiPropsType = {
-  prev: number;
-  current: number;
-  appsCount: number;
-  usersCount: number;
+  overView: {
+    users: number;
+    apps: number;
+    changes: {
+      prev: number;
+      current: number;
+    };
+  };
 };
 
 const ProjectUi: FC<ProjectUiPropsType> = ({
-  prev,
-  current,
-  appsCount,
-  usersCount,
+  overView: {
+    users: usersCount,
+    apps: appsCount,
+    changes: { prev, current },
+  },
 }) => (
   <ContentWraper className="py-6 flex flex-col gap-4">
     <h2 className="text-2xl font-light text-foreground">Overview</h2>

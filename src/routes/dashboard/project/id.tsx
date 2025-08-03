@@ -1,22 +1,35 @@
 import type { FC } from "react";
-import {  useParams } from "react-router-dom";
-import { projects } from "../projects";
 import ProjectUi from "@/components/app/dashboard/project/project";
+import useProject from "@/providers/project.provider";
+import { Navigate } from "react-router-dom";
+import useOverView, { OverViewProvider } from "@/providers/overview.provider";
+
+const OverView: FC = () => {
+  const { error, overView } = useOverView();
+
+  if (overView === undefined || error) {
+    return (
+      <div>
+        some error,
+        {error}
+      </div>
+    );
+  }
+
+  return <ProjectUi overView={overView} />;
+};
 
 const ProjectPage: FC = () => {
-  const { id } = useParams() as {
-    id: string;
-  };
-  const project = projects.find((project) => project._id === id)!;
+  const { project, id } = useProject();
 
-  // user changes
-  const changes = {
-    prev: 200,
-    current: 400,
-  };
+  if (project === undefined) {
+    return <Navigate to="/dashboard" />;
+  }
 
   return (
-    <ProjectUi {...changes} usersCount={1000} appsCount={project.apps.length} />
+    <OverViewProvider id={id}>
+      <OverView />
+    </OverViewProvider>
   );
 };
 

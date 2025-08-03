@@ -1,26 +1,14 @@
 "use server";
 
-import type { RegisterFromType } from "@/@types/auth.type";
+import type { LoginFromType, RegisterFromType } from "@/@types/auth.type";
 import type {
   LoginResponseType,
   RegisterResponseType,
 } from "@/@types/responce.type";
 import { post } from "@/api/main";
+import { formatJoiError } from "@/lib/joi";
 import { saveToLocal } from "@/lib/local";
 import { loginSchema, registerSchema } from "@/schema/auth";
-import type { ValidationError } from "joi";
-
-
-const formatJoiError = ({ details }: ValidationError) =>
-  details.reduce((acc, current) => {
-    const path = current.path as unknown as keyof RegisterFromType;
-    if (acc[path]) {
-      acc[path].push(current.message);
-    } else {
-      acc[path] = [current.message];
-    }
-    return acc;
-  }, {} as Record<keyof RegisterFromType, string[]>);
 
 const getFormData = (formData: FormData) => {
   const uname = formData.get("name");
@@ -45,7 +33,7 @@ const register = async (_: unknown, formData: FormData) => {
     return {
       error: {
         root: undefined,
-        ...formatJoiError(error),
+        ...formatJoiError<RegisterFromType>(error),
       },
     };
   }
@@ -80,7 +68,7 @@ const login = async (_: unknown, formData: FormData) => {
     return {
       error: {
         root: undefined,
-        ...formatJoiError(error),
+        ...formatJoiError<LoginFromType>(error),
       },
     };
   }

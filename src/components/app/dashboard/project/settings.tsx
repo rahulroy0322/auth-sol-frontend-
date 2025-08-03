@@ -12,7 +12,10 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
-const ProjectSettingsUi: FC = () => (
+type ProjectSettingsUiPropsType = {
+  name: string;
+};
+const ProjectSettingsUi: FC<ProjectSettingsUiPropsType> = ({ name }) => (
   <ContentWraper className="py-6 flex flex-col gap-4">
     <h2 className="text-2xl font-light text-foreground">Settings</h2>
 
@@ -23,7 +26,11 @@ const ProjectSettingsUi: FC = () => (
         </CardHeader>
         <CardContent className="space-y-2">
           <Label>Name</Label>
-          <Input className="rounded-sm" placeholder="Project Name" />
+          <Input
+            value={name}
+            className="rounded-sm"
+            placeholder="Project Name"
+          />
         </CardContent>
       </Card>
       <Card>
@@ -38,6 +45,5 @@ const ProjectSettingsUi: FC = () => (
     </div>
   </ContentWraper>
 );
-
 
 export default ProjectSettingsUi;

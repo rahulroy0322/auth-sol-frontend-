@@ -11,6 +11,8 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { EllipsisVertical } from "lucide-react";
 
 type UsersUiPropsType = {
   users: UserType[];
@@ -29,19 +31,19 @@ const UsersUi: FC<UsersUiPropsType> = ({ users }) => {
             <TableHead>Uname</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Role</TableHead>
-            <TableHead>2FA</TableHead>
+            <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {users.map(({ _id, role, email, uname, "2fa": { enabled } }) => (
+          {users.map(({ _id, role, email, uname }) => (
             <TableRow
               key={_id}
               className={cn({
                 "bg-destructive/50":
-                  (role === "admin" || role === "owner" || role === "editor") &&
-                  !enabled,
+                  role === "admin" || role === "owner" || role === "editor",
               })}
             >
+              {/* eslint-disable-next-line no-magic-numbers */}
               <TableCell>{_id.substring(0, 8)}</TableCell>
               <TableCell>{uname}</TableCell>
               <TableCell>{email}</TableCell>
@@ -59,9 +61,9 @@ const UsersUi: FC<UsersUiPropsType> = ({ users }) => {
                 </Badge>
               </TableCell>
               <TableCell>
-                <Badge variant={enabled ? "outline" : "destructive"}>
-                  {enabled ? "Enabled" : "Disabled"}
-                </Badge>
+                <Button variant="ghost" size="icon">
+                  <EllipsisVertical />
+                </Button>
               </TableCell>
             </TableRow>
           ))}
